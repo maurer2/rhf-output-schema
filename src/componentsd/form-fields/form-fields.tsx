@@ -1,4 +1,4 @@
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ErrorMessage } from "@hookform/error-message";
@@ -20,7 +20,7 @@ export default function FormFields() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, defaultValues },
     control,
   } = useForm<FormSchema, undefined, FormSchemaTransformed>({
     defaultValues: {
@@ -56,30 +56,16 @@ export default function FormFields() {
           <ErrorMessage errors={errors} name="age" />
         </div>
 
-        <div>
-          <Controller
-            control={control}
-            name="isActive"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <>
-                <div>
-                  <input
-                    type="checkbox"
-                    onChange={(event) => {
-                      onChange(event.currentTarget.checked);
-                    }}
-                    onBlur={onBlur}
-                    name="isActive"
-                    value="true"
-                    id="is-active"
-                    checked={value}
-                  />
-                  <label htmlFor="is-active">is active</label>
-                </div>
-                <ErrorMessage errors={errors} name="isActive" />
-              </>
-            )}
+        <div className="field-checkbox">
+          <input
+            type="checkbox"
+            {...register("isActive")}
+            defaultChecked={defaultValues?.isActive ?? false}
           />
+          <label htmlFor="is-active">is active</label>
+          <div className="error">
+            <ErrorMessage errors={errors} name="isActive" />
+          </div>
         </div>
 
         <button type="submit">Send</button>
