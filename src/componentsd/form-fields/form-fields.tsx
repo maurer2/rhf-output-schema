@@ -6,8 +6,11 @@ import { DevTool } from "@hookform/devtools";
 import { useState } from "react";
 
 export const formSchema = z.object({
-  name: z.string().transform((value) => value.split(" ")),
-  age: z.string().pipe(z.coerce.number()),
+  name: z
+    .string()
+    .min(1)
+    .transform((value) => value.split(" ")),
+  age: z.string().min(1).pipe(z.coerce.number()),
   isActive: z.boolean().transform((value) => (value ? "Yay" : "Nay")),
 });
 
@@ -15,8 +18,7 @@ type FormSchema = z.input<typeof formSchema>;
 type FormSchemaTransformed = z.output<typeof formSchema>;
 
 export default function FormFields() {
-  const [transformedValues, setTransformedValues] =
-    useState<FormSchemaTransformed | null>(null);
+  const [transformedValues, setTransformedValues] = useState<FormSchemaTransformed | null>(null);
   const {
     register,
     handleSubmit,
@@ -40,17 +42,18 @@ export default function FormFields() {
   return (
     <>
       <form
+        className="form"
         name="test form"
         aria-label="test form"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div>
+        <div className="field">
           <label htmlFor="name">Name</label>
           <input {...register("name")} id="name" />
           <ErrorMessage errors={errors} name="name" />
         </div>
 
-        <div>
+        <div className="field">
           <label htmlFor="age">Age</label>
           <input {...register("age")} id="age" />
           <ErrorMessage errors={errors} name="age" />
@@ -70,10 +73,8 @@ export default function FormFields() {
 
         <button type="submit">Send</button>
 
-        <div>
-          {transformedValues ? (
-            <output>{JSON.stringify(transformedValues, null, 4)}</output>
-          ) : null}
+        <div className="output">
+          {transformedValues ? <output>{JSON.stringify(transformedValues, null, 4)}</output> : null}
         </div>
       </form>
       <DevTool control={control} />

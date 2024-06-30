@@ -1,2 +1,3 @@
-git config diff.lockb.textconv bun
-git config diff.lockb.binary true
+git config diff.bun.cachetextconv true
+git config diff.bun.binary true
+git config diff.bun.textconv "~/.bun-diff"
