@@ -22,7 +22,7 @@ export default function FormFields() {
   const {
     register,
     handleSubmit,
-    formState: { errors, defaultValues },
+    formState: { errors },
     control,
   } = useForm<FormSchema, undefined, FormSchemaTransformed>({
     defaultValues: {
@@ -60,12 +60,7 @@ export default function FormFields() {
         </div>
 
         <div className="field-checkbox">
-          <input
-            type="checkbox"
-            {...register("isActive")}
-            defaultChecked={defaultValues?.isActive ?? false}
-            id="isActive"
-          />
+          <input type="checkbox" {...register("isActive")} id="isActive" />
           <label htmlFor="isActive">is active</label>
           <div className="error">
             <ErrorMessage errors={errors} name="isActive" />
