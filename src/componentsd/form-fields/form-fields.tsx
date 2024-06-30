@@ -64,8 +64,9 @@ export default function FormFields() {
             type="checkbox"
             {...register("isActive")}
             defaultChecked={defaultValues?.isActive ?? false}
+            id="isActive"
           />
-          <label htmlFor="is-active">is active</label>
+          <label htmlFor="isActive">is active</label>
           <div className="error">
             <ErrorMessage errors={errors} name="isActive" />
           </div>
