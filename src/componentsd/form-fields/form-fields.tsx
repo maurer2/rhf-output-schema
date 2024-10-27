@@ -1,4 +1,4 @@
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ErrorMessage } from '@hookform/error-message';
@@ -12,6 +12,7 @@ export const formSchema = z.object({
     .transform((value) => value.split(' ')),
   age: z.string().min(1).pipe(z.coerce.number()),
   isActive: z.boolean().transform((value) => (value ? 'Yay' : 'Nay')),
+  test: z.string().optional(),
 });
 
 type FormSchema = z.input<typeof formSchema>;
@@ -32,6 +33,7 @@ export default function FormFields() {
       name: 'Name1 Name2',
       age: '50',
       isActive: true,
+      test: 'test',
     },
     disabled: isDisabled,
     resolver: zodResolver(formSchema),
@@ -51,8 +53,7 @@ export default function FormFields() {
         aria-label="test form"
         onSubmit={handleSubmit(onSubmit)}
         // @ts-ignore
-        inert={disabled ? 'inert' : undefined} // React 18
-        // inert={disabled} // React 19+
+        inert={disabled ? 'inert' : undefined}
       >
         <div className="field">
           <label htmlFor="name">Name</label>
@@ -74,6 +75,28 @@ export default function FormFields() {
           </div>
         </div>
 
+        <div className="field">
+          <Controller
+            control={control}
+            name="test"
+            // disabled={false} // gets overridden by global disabled
+            disabled={true} // never overridden
+            render={({ field: { onChange, onBlur, value, disabled: disabledAtFieldLevel } }) => (
+              <>
+                <input
+                  id="test"
+                  value={value}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  disabled={disabledAtFieldLevel}
+                />
+                <pre>{String(disabled)}</pre>
+                <pre>{String(disabledAtFieldLevel)}</pre>
+              </>
+            )}
+          />
+        </div>
+
         <button type="submit">Send</button>
 
         <div className="output">
@@ -81,7 +104,7 @@ export default function FormFields() {
         </div>
       </form>
       <button type="button" onClick={toggleIsDisabled}>
-        Toggle form inert status
+        Toggle inert status of form
       </button>
       <DevTool control={control} />
     </>
