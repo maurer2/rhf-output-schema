@@ -51,7 +51,8 @@ export default function FormFields() {
         aria-label="test form"
         onSubmit={handleSubmit(onSubmit)}
         // @ts-ignore
-        inert={disabled ? 'inert' : ''}
+        inert={disabled ? 'inert' : undefined} // React 18
+        // inert={disabled} // React 19+
       >
         <div className="field">
           <label htmlFor="name">Name</label>
